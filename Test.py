@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import json
+
 fila = 5
 for i in range(fila):
     print(" "*(fila-i) + "*" * (i+1))
