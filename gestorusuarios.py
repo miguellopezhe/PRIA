@@ -1,6 +1,7 @@
 import json
 import os
-from usuario import Usuario 
+
+from usuario import Usuario
 
 def datos(archivo):
 
@@ -27,8 +28,7 @@ def añadir_usuario(archivo, dni, nombre):
 
     print("\nUsuario creado correctamente")
 
-    with open(archivo, "w") as f: 
-        json.dump(datos, f)
+    guardar_datos(archivo, datos)
     
 def mostrar_datos(archivo):
     datos = leer_json(archivo) 
@@ -43,7 +43,20 @@ def leer_json(archivo):
     return datos  
 
 def eliminar_usuario(archivo):
-    True
+    dni = str(input("Introduce el dni para eliminar el usuario: "))
+
+    datos = leer_json(archivo)
+
+    contador = 0
+    for usuario in datos:
+        if usuario["dni"] == dni:
+            del datos[contador]
+            guardar_datos(archivo, datos)
+            print("\nUsuario eliminado correctamente.")    
+            break
+        else:
+            print("\nUsuario no encontrado.")
+        contador += 1
 
 def modificar_usuario(archivo):
     True   
@@ -61,3 +74,7 @@ def comprobar_dni(dni):
         return False
 
     return True
+
+def guardar_datos(archivo, datos):
+    with open(archivo, "w") as f: 
+        json.dump(datos, f)
