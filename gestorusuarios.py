@@ -2,24 +2,34 @@ import json
 import os
 
 from usuario import Usuario
+rojo = "\033[31m"
+negro = "\033[0m"
+verde = "\033[32m"
 
 def datos(archivo):
     dni = str(input("Introduce el DNI: "))
     while True:  
         if comprobar_dni(dni): 
-            print("\nERROR: DNI incorrecto. Introduce los datos de nuevo\n")
+            print(rojo,"\nERROR: DNI incorrecto. Introduce los datos de nuevo\n",negro)
             dni = str(input("Introduce el DNI: "))
+            comprobardni = False
+        else:
+            comprobardni = True
 
         if dni_repite(archivo,dni):
-                print("\nERROR: DNI repetido. Introduce los datos de nuevo\n")
-                dni = str(input("Introduce el DNI: "))
-        else:      
+            print(rojo,"\nERROR: DNI repetido. Introduce los datos de nuevo\n",negro)
+            dni = str(input("Introduce el DNI: "))
+            comprobarnombre = False
+        else:
+            comprobarnombre = True
+
+        if comprobardni & comprobarnombre:      
             break
 
     nombre = str(input("Introduce el nombre: "))
     while True:
         if comprobar_nombre(nombre): 
-            print("\nERROR: Nombre incorrecto. Introduce los datos de nuevo\n")
+            print(rojo,"\nERROR: Nombre incorrecto. Introduce los datos de nuevo\n",negro)
             nombre = str(input("Introduce el nombre: "))
         else:       
             break  
@@ -38,7 +48,7 @@ def añadir_usuario(archivo, dni, nombre):
 
     datos.append(usuario)
 
-    print("\nUsuario creado correctamente")
+    print(verde,"\nUsuario creado correctamente",negro)
 
     guardar_datos(archivo, datos)
     
@@ -46,12 +56,12 @@ def mostrar_datos(archivo):
 
     try:
         datos = leer_json(archivo) 
-
+        datosordenados = ordenar_json(datos)
         print("Lista de usuarios")
-        for usuario in datos:
+        for usuario in datosordenados:
             print("DNI: " + usuario["dni"] + ", Nombre: " + usuario["nombre"])   
     except:
-        print("No existe el archivo")
+        print(rojo,"No existe el archivo",negro)
 
 def leer_json(archivo):
     with open(archivo, "r") as f:
@@ -68,10 +78,10 @@ def eliminar_usuario(archivo):
         if usuario["dni"] == dni:
             del datos[contador]
             guardar_datos(archivo, datos)
-            print("\nUsuario eliminado correctamente.")    
+            print(verde,"\nUsuario eliminado correctamente.",negro)    
             break
         contador += 1
-    print("\nUsuario no encontrado.")
+    print(rojo,"\nUsuario no encontrado.",negro)
     
 def modificar_usuario(archivo):
     dni = str(input("Introduce el dni para modificar: "))
@@ -86,7 +96,7 @@ def modificar_usuario(archivo):
             datos[contador]["nombre"] = nombre
             guardar_datos(archivo, datos)      
         contador += 1
-    print("\nUsuario no encontrado.")
+    print(rojo,"\nUsuario no encontrado.",negro)
 
 def comprobar_dni(dni):
     if len(dni) != 9:
@@ -106,10 +116,13 @@ def guardar_datos(archivo, datos):
         json.dump(datos, f, indent=2)
 
 def comprobar_nombre(nombre):
-    if nombre.isdigit() | len(nombre) == 0:
+    if nombre.isdigit():
         return True
-    else:
-        return False
+    
+    if len(nombre) == 0:
+        return True
+    
+    return False
 
 def que_modificar():
     True
@@ -124,3 +137,5 @@ def dni_repite(archivo, dni):
             
     return False
 
+def ordenar_json(datos):
+    return sorted(datos, key=lambda x: x["nombre"])
