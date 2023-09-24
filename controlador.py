@@ -13,7 +13,7 @@ def ejecutar():
                 gestorusuarios.mostrar_datos(archivo_json)
             
             elif opcion == "2":
-                gestorusuarios.datos(archivo_json)
+                gestorusuarios.agregar_usuario(archivo_json)
 
             elif opcion == "3":
                 gestorusuarios.modificar_usuario(archivo_json)
@@ -34,8 +34,14 @@ def mostrar_menu():
     print("4. Eliminar usuario")
     print("5. Salir")
 
+def crear_json(archivo):    
+    if not os.path.exists(archivo):
+        datos = []
+        gestorusuarios.guardar_datos(archivo, datos)
+
 if __name__ == "__main__":
     archivo_json = "usuarios.json"
+    crear_json(archivo_json)
     ejecutar()
 
 
