@@ -1,6 +1,4 @@
 import json
-import re
-
 from usuario import Usuario
 rojo = "\033[31m"
 negro = "\033[0m"
@@ -111,7 +109,6 @@ def modificar_usuario(archivo):
         print(rojo,"\nUsuario no encontrado.",negro)
 
 def comprobar_dni(dni):
-    """
     if len(dni) != 9:
         return True
 
@@ -120,12 +117,6 @@ def comprobar_dni(dni):
             return True
         
     if dni[8].isdigit():
-        return True
-    """
-    dni = dni.upper()
-    if re.match(r"\d{8}[A-Z]", dni):
-        return False
-    else:
         return True
 
 def guardar_datos(archivo, datos):
