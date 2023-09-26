@@ -1,4 +1,5 @@
 import json
+import datetime
 from usuario import Usuario
 rojo = "\033[31m"
 negro = "\033[0m"
@@ -10,18 +11,14 @@ def recoger_datos(archivo):
         if comprobar_dni(dni): 
             print(rojo,"\nERROR: DNI incorrecto. Introduce los datos de nuevo.\n",negro)
             dni = str(input("Introduce el DNI: "))
-            comprobardni = False
         else:
-            comprobardni = True
+            break
 
+    while True:
         if dni_repite(archivo,dni):
             print(rojo,"\nERROR: DNI repetido. Introduce los datos de nuevo.\n",negro)
             dni = str(input("Introduce el DNI: "))
-            comprobarnombre = False
         else:
-            comprobarnombre = True
-
-        if comprobardni & comprobarnombre:      
             break
 
     nombre = str(input("Introduce el nombre: "))
@@ -31,16 +28,24 @@ def recoger_datos(archivo):
             nombre = str(input("Introduce el nombre: "))
         else:       
             break  
+    
+    fecha = str(input("Introduce tu fecha de nacimiento (dd/MM/aaaa): "))
+    while True:
+        if comprobar_fecha(fecha): 
+            print(rojo,"\nERROR: Fecha incorrecta. Introduce los datos de nuevo.\n",negro)
+            fecha = str(input("Introduce tu fecha de nacimiento (dd/MM/aaaa): "))
+        else:       
+            break  
 
     dni = dni.upper() 
     nombre = nombre.capitalize()
-    return dni, nombre
+    return dni, nombre, fecha
 
 def agregar_usuario(archivo):
 
-    dni, nombre = recoger_datos(archivo)
+    dni, nombre, fecha = recoger_datos(archivo)
 
-    usuario = Usuario(dni, nombre).to_json()    
+    usuario = Usuario(dni, nombre, fecha).to_json()    
   
     datos = leer_json(archivo)
 
@@ -59,7 +64,7 @@ def mostrar_datos(archivo):
             datosordenados = ordenar_json(datos)
             print("Lista de usuarios")
             for usuario in datosordenados:
-                print("DNI: " + usuario["dni"] + ", Nombre: " + usuario["nombre"])   
+                print("DNI: " + usuario["dni"] + ", Nombre: " + usuario["nombre"] + ", Fecha: " + usuario["fecha"])   
     except:
         print(rojo,"No existe el archivo.",negro)
 
@@ -96,9 +101,10 @@ def modificar_usuario(archivo):
     contador = 0
     for usuario in datos:
         if usuario["dni"] == dni:
-            dni, nombre = recoger_datos(archivo)
+            dni, nombre, fecha = recoger_datos(archivo)
             datos[contador]["dni"] = dni
             datos[contador]["nombre"] = nombre
+            datos[contador]["fecha"] = fecha
             guardar_datos(archivo, datos)   
             print(verde,"\nUsuario modificado correctamente.",negro)   
             encontrado = True 
@@ -112,7 +118,7 @@ def comprobar_dni(dni):
     if len(dni) != 9:
         return True
 
-    for i in range(0, 7):
+    for i in range(0, 8):
         if not dni[i].isdigit():
             return True
         
@@ -132,9 +138,6 @@ def comprobar_nombre(nombre):
 
     return False
 
-def que_modificar():
-    True
-
 def dni_repite(archivo, dni):
     datos = leer_json(archivo)
     
@@ -147,3 +150,44 @@ def dni_repite(archivo, dni):
 
 def ordenar_json(datos):
     return sorted(datos, key=lambda x: x["nombre"])
+
+def calcular_edad(fecha):
+
+    formato = fecha.split("/")
+
+    dia = int(formato[0])
+    mes = int(formato[1])
+    año = int(formato[2])
+    
+
+    fecha_actual = datetime.date.today()
+    fecha_nacimiento = datetime.date(año, mes, dia)
+
+    diferencia = fecha_actual - fecha_nacimiento
+
+    edad = diferencia.days // 365
+
+    return edad
+
+def comprobar_fecha(fecha):
+    try:
+        datetime.datetime.strptime(fecha, "%d/%m/%Y")
+    except:
+        return True
+    
+    formato = fecha.split("/")
+
+    dia = int(formato[0])
+    mes = int(formato[1])
+    año = int(formato[2])
+    
+    if dia < 1 or dia > 31:
+        return False
+   
+    if mes < 1 or mes > 12:
+        return False
+
+    if 1900 < año < 2023:
+        return False
+    else:
+        return True
