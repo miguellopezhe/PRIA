@@ -117,7 +117,6 @@ def modificar_usuario(archivo):
 def modificar_datos():
 
     respuesta = str(input("¿Quieres modificar el nombre? (S/N): "))
-
     while True:
         if respuesta == "S":
             nombre = str(input("Introduce el nombre: "))
@@ -133,9 +132,7 @@ def modificar_datos():
         else:
             print("Respuesta incorrecta.")
 
-
     respuesta = str(input("¿Quieres modificar la fecha? (S/N): "))
-
     while True:
             if respuesta == "S":
                 fecha = str(input("Introduce tu fecha de nacimiento (dd/MM/aaaa): "))
