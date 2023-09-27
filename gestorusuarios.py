@@ -5,6 +5,7 @@ rojo = "\033[31m"
 negro = "\033[0m"
 verde = "\033[32m"
 
+
 def recoger_datos(archivo):
     dni = str(input("Introduce el DNI: "))
     while True:  
@@ -93,7 +94,7 @@ def eliminar_usuario(archivo):
         print(rojo,"\nUsuario no encontrado.",negro)
     
 def modificar_usuario(archivo):
-    dni = str(input("Introduce el dni para modificar: "))
+    dni = str(input("Introduce el dni de usuario para modificar sus datos: "))
     dni = dni.upper() 
 
     datos = leer_json(archivo)
@@ -101,8 +102,7 @@ def modificar_usuario(archivo):
     contador = 0
     for usuario in datos:
         if usuario["dni"] == dni:
-            dni, nombre, fecha = recoger_datos(archivo)
-            datos[contador]["dni"] = dni
+            nombre, fecha = modificar_datos()
             datos[contador]["nombre"] = nombre
             datos[contador]["fecha"] = fecha
             guardar_datos(archivo, datos)   
@@ -113,6 +113,46 @@ def modificar_usuario(archivo):
 
     if not encontrado:
         print(rojo,"\nUsuario no encontrado.",negro)
+
+def modificar_datos():
+
+    respuesta = str(input("¿Quieres modificar el nombre? (S/N): "))
+
+    while True:
+        if respuesta == "S":
+            nombre = str(input("Introduce el nombre: "))
+            while True:
+                if comprobar_nombre(nombre): 
+                    print(rojo,"\nERROR: Nombre incorrecto. Introduce los datos de nuevo.\n",negro)
+                    nombre = str(input("Introduce el nombre: "))
+                else:
+                    #coger el nombre del dni que ha metido      
+                    break  
+        elif respuesta == "N":
+            break
+        else:
+            print("Respuesta incorrecta.")
+
+
+    respuesta = str(input("¿Quieres modificar la fecha? (S/N): "))
+
+    while True:
+            if respuesta == "S":
+                fecha = str(input("Introduce tu fecha de nacimiento (dd/MM/aaaa): "))
+                while True:
+                    if comprobar_fecha(fecha): 
+                        print(rojo,"\nERROR: Fecha incorrecta. Introduce los datos de nuevo.\n",negro)
+                        fecha = str(input("Introduce tu fecha de nacimiento (dd/MM/aaaa): "))
+                    else:  
+                        #coger el nombre del dni que ha metido      
+                        break  
+            elif respuesta == "N":
+                break
+            else:
+                print("Respuesta incorrecta.")
+ 
+    nombre = nombre.capitalize()
+    return nombre, fecha
 
 def comprobar_dni(dni):
     if len(dni) != 9:
@@ -191,3 +231,17 @@ def comprobar_fecha(fecha):
         return False
     else:
         return True
+
+def mostrar_edad(archivo):
+    try:
+        datos = leer_json(archivo) 
+        if len(datos) == 0:
+            print(rojo,"No hay ningun usuario.",negro)
+        else:
+            datosordenados = ordenar_json(datos)
+            print("Lista de usuarios")
+            for usuario in datosordenados:
+                edad = str(calcular_edad(usuario["fecha"]))
+                print("DNI: " + usuario["dni"] + ", Nombre: " + usuario["nombre"] + ", Fecha: " + usuario["fecha"] + ", Edad: " + edad)   
+    except:
+        print(rojo,"No existe el archivo.",negro)

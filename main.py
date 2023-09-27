@@ -2,6 +2,8 @@
 
 import gestorusuarios
 import os
+rosa = "\033[38;2;255;0;0m"
+negro = "\033[0m"
 
 def ejecutar():
     os.system("clear")
@@ -21,6 +23,8 @@ def ejecutar():
                 case "4":
                     gestorusuarios.eliminar_usuario(archivo_json)
                 case "5":
+                    gestorusuarios.mostrar_edad(archivo_json)
+                case "6":
                     break
                 case other:
                     print("Opción no válida. Intente de nuevo.")
@@ -30,7 +34,8 @@ def mostrar_menu():
     print("2. Agregar usuario")
     print("3. Modificar usuario")
     print("4. Eliminar usuario")
-    print("5. Salir")
+    print("5. Mostrar edades")
+    print("6. Salir")
 
 def crear_json(archivo):    
     if not os.path.exists(archivo):
