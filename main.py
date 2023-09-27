@@ -2,17 +2,20 @@
 
 import gestorusuarios
 import os
-rosa = "\033[38;2;255;0;0m"
-negro = "\033[0m"
+import datetime
 
 def ejecutar():
-    os.system("clear")
+    try:
+        os.system("clear")
+        os.system("cls")
+    except:
+        pass
+
     while True:
             print("\n- - - - - - - - - - - - - - - - - - - -")
             mostrar_menu()
             opcion = input("\nElija una opción: ")
-            print("\n")
-
+           
             match opcion: 
                 case "1":
                     gestorusuarios.mostrar_datos(archivo_json)      
@@ -46,6 +49,7 @@ if __name__ == "__main__":
     archivo_json = "usuarios.json"
     crear_json(archivo_json)
     ejecutar()
+    
 
 
    
