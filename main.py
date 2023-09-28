@@ -42,10 +42,15 @@ def crear_json(archivo):
         gestorusuarios.guardar_datos(archivo, datos)
 
 def clear():
-    if os.name() == "nt":
+    try:
         os.system("cls")
-    else:
+    except:
+        True
+
+    try:
         os.system("clear")
+    except:
+        True
 
 if __name__ == "__main__":
     archivo_json = "usuarios.json"

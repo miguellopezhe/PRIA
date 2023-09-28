@@ -91,26 +91,30 @@ def eliminar_usuario(archivo):
         print(rojo,"\nUsuario no encontrado.",negro)
     
 def modificar_usuario(archivo):
-    print ("\n---Modificar usuario---\n")
-    dni = str(input("Introduce el dni del usuario para modificar sus datos: "))
-    dni = dni.upper() 
+    datos = leer_json(archivo) 
+    if len(datos) == 0:
+        print(rojo,"\nNo hay ningun usuario.",negro)
+    else:
+        print ("\n---Modificar usuario---\n")
+        dni = str(input("Introduce el dni del usuario para modificar sus datos: "))
+        dni = dni.upper() 
 
-    datos = leer_json(archivo)
-    encontrado = False
-    contador = 0
-    for usuario in datos:
-        if usuario["dni"] == dni:
-            nombre, fecha = modificar_datos(usuario["nombre"],usuario["fecha"])
-            datos[contador]["nombre"] = nombre
-            datos[contador]["fecha"] = fecha
-            guardar_datos(archivo, datos)   
-            print(verde,"\nUsuario modificado correctamente.",negro)   
-            encontrado = True 
-            break
-        contador += 1
+        datos = leer_json(archivo)
+        encontrado = False
+        contador = 0
+        for usuario in datos:
+            if usuario["dni"] == dni:
+                nombre, fecha = modificar_datos(usuario["nombre"],usuario["fecha"])
+                datos[contador]["nombre"] = nombre
+                datos[contador]["fecha"] = fecha
+                guardar_datos(archivo, datos)   
+                print(verde,"\nUsuario modificado correctamente.",negro)   
+                encontrado = True 
+                break
+            contador += 1
 
-    if not encontrado:
-        print(rojo,"\nUsuario no encontrado.",negro)
+        if not encontrado:
+            print(rojo,"\nUsuario no encontrado.",negro)
 
 def modificar_datos(nombre1, fecha1):
     nombre=""
