@@ -2,14 +2,10 @@
 
 import gestorusuarios
 import os
-import datetime
+rojo = "\033[31m"
+negro = "\033[0m"
 
 def ejecutar():
-    try:
-        os.system("clear")
-        os.system("cls")
-    except:
-        pass
 
     while True:
             print("\n- - - - - - - - - - - - - - - - - - - -")
@@ -30,7 +26,7 @@ def ejecutar():
                 case "6":
                     break
                 case other:
-                    print("Opción no válida. Intente de nuevo.")
+                    print(rojo,"\nOpción no válida. Intente de nuevo.",negro)
 
 def mostrar_menu():
     print("\n1. Mostrar todos los usuarios")
@@ -45,12 +41,19 @@ def crear_json(archivo):
         datos = []
         gestorusuarios.guardar_datos(archivo, datos)
 
+def clear():
+    if os.name() == "nt":
+        os.system("cls")
+    else:
+        os.system("clear")
+
 if __name__ == "__main__":
     archivo_json = "usuarios.json"
     crear_json(archivo_json)
+    clear()
     ejecutar()
     
 
 
-   
+
 

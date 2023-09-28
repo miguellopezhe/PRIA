@@ -13,7 +13,7 @@ class Usuario:
             "nombre": self.nombre,
             "fecha": self.fecha,
         }
-
+"""
     def get_dni(self):  
         return self.dni
     
@@ -31,3 +31,4 @@ class Usuario:
     
     def set_fecha(self,fecha):  
         self.fecha=fecha
+"""
