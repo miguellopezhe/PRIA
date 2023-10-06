@@ -2,6 +2,8 @@
 
 import gestorusuarios
 import os
+
+
 rojo = "\033[31m"
 negro = "\033[0m"
 
@@ -14,7 +16,7 @@ def ejecutar():
            
             match opcion: 
                 case "1":
-                    gestorusuarios.mostrar_datos(archivo_json)      
+                    gestorusuarios.mostrar_datos2(archivo_json)      
                 case "2":
                     gestorusuarios.agregar_usuario(archivo_json)
                 case "3":

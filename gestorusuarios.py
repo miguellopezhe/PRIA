@@ -1,6 +1,10 @@
 import json
 import datetime
 from usuario import Usuario
+import rich
+from rich.table import Table
+from rich.console import Console
+
 rojo = "\033[31m"
 negro = "\033[0m"
 verde = "\033[32m"
@@ -64,6 +68,27 @@ def mostrar_datos(archivo):
             print("\n---Lista de usuarios---\n")
             for usuario in datosordenados:
                 print("DNI: " + usuario["dni"] + ", Nombre: " + usuario["nombre"] + ", Fecha: " + usuario["fecha"])
+
+def mostrar_datos2(archivo):
+    datos = leer_json(archivo)
+    if len(datos) == 0:
+        print(rich.color.red, "\nNo hay ningún usuario.", rich.color.reset)
+    else:
+        datosordenados = ordenar_json(datos)
+        table = Table(title="Lista de usuarios")
+        table.add_column("DNI", justify="center")
+        table.add_column("Nombre", justify="left")
+        table.add_column("Fecha", justify="center")
+        for usuario in datosordenados:
+            table.add_row(
+                usuario["dni"],
+                usuario["nombre"],
+                usuario["fecha"],
+            )
+        console = Console()
+        console.print(table)
+
+
 
 def leer_json(archivo):
     with open(archivo, "r") as f:
